@@ -1,0 +1,27 @@
+---
+- hosts: xray_servers
+  become: true
+  tasks:
+    - name: Install JFrog Xray dependencies
+      apt:
+        name: 
+          - curl
+          - gnupg2
+          - apt-transport-https
+          - software-properties-common
+        state: present
+
+    - name: Add JFrog Xray GPG key
+      apt_key:
+        url: https://releases.jfrog.io/artifactory/api/gpg/key/public
+        state: present
+
+    - name: Add JFrog Xray repository
+      apt_repository:
+        repo: deb https://releases.jfrog.io/artifactory/jfrog-debs xenial main
+        state: present
+
+    - name: Install JFrog Xray
+      apt:
+        name: jfrog-xray
+        state: present
